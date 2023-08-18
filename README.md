@@ -18,7 +18,7 @@ A tiny library to model finite state machines.
            (process-event \b)
            :value)))
 ;;=> 3
-;;=> 3
+;;=> 1
 ```
 
 The vector of states given to `make-fsm` must satisfy the following grammar:

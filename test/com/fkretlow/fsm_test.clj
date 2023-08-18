@@ -1,6 +1,6 @@
 (ns com.fkretlow.fsm-test
   (:require
-   [clojure.test :refer [deftest is]]
+   [clojure.test :refer [deftest is run-tests testing]]
    [com.fkretlow.fsm :refer [make-fsm process-event reduce-fsm]]))
 
 (def ^:private count-ab-states [[:init, \a :a, :init]
@@ -28,3 +28,19 @@
 (deftest test-reduce-fsm
   (let [fsm (make-fsm count-ab-states 0)]
     (is (= 3 (reduce-fsm fsm "abcabdab")))))
+
+(deftest test-for-regex
+  (testing "finds the pattern /(abc)+d/ in the input string"
+   (let [states
+        [[:0, \a :a],
+         [:a, \a :a, \b :b, :0],
+         [:b, \c :c, :0],
+         [:c, \a :a, \d [:d (constantly true)]]
+         [:d]]
+        fsm (make-fsm states false)]
+    (is (reduce-fsm fsm "abcd"))
+    (is (reduce-fsm fsm "abcabcd"))
+    (is (reduce-fsm fsm "xxxabcabcdxxx"))
+    (is (not (reduce-fsm fsm "abd"))))))
+
+(run-tests)

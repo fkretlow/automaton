@@ -34,6 +34,12 @@ actions:              function | seqable of functions
 ```
 
 If more than one function is given for `actions`, the functions will be composed in the given order.
+The FSM will be initialized in the first given state.
+
+## See also
+
+- https://github.com/cdorrat/reduce-fsm: mature, fast FSM library
+- https://github.com/metosin/tilakone: smaller than reduce-fsm, no macros
 
 ## License
 

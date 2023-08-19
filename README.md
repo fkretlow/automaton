@@ -1,16 +1,16 @@
 # fsm-clj
 
-A tiny library to model finite state machines.
+A tiny library to model finite state machines. No macros, just Clojure data structures.
 
 ## Usage
 
 ```clojure
 (let [states [[:start,                  ; 1st state: :start
-               \a :found-a]             ;   - transitions to :found-a on event \a
+               \a :found-a],            ;   - transitions to :found-a on event \a
               [:found-a,                ; 2nd state: :found-a
                \a :found-a,             ;   - transitions to :found-a on event \a
-               \b [:start inc],         ;   - transitions to :start on event \b and applies inc to the value
-               :start]]                 ;   - transitions to :start on all other events
+               \b :start inc,           ;   - transitions to :start on event \b and applies inc to the value
+               :start]],                ;   - transitions to :start on all other events
       count-ab (make-fsm states 0)]     ; make the state machine with an initial value of 0
   (prn (reduce-fsm count-ab "ababab"))  ; process the characters one by one and return the final value
   (prn (-> count-ab                     ; can also process single events
@@ -21,22 +21,29 @@ A tiny library to model finite state machines.
 ;;=> 1
 ```
 
-The vector of states given to `make-fsm` must satisfy the following grammar:
+The vector of states given to `make-fsm` must satisfy the following grammar
 ```
 states-vector:        [state+]
-state:                [state-key transition-on-event* default-transition?]
-state-key:            keyword
+state:                [state-key transition-list | state-function]
+transition-list       transition-on-event* default-transition?
+state-key:            _keyword_
 transition-on-event:  event transition
 default-transition:   transition
-event:                anything
-transition:           state-key | [state-key actions]
-actions:              function | seqable of functions
+state-function:       _a function taking an event and returning a vector
+                      containing the elements of a transition as defined below_
+event:                _anything_
+transition:           state-key actions?
+actions:              _function_ | _seqable of functions_
 ```
+where `*` means \"zero or more\", `?` means \"at most one\", `+` means \"at least one\", and `|` means \"or\"."
 
-If more than one function is given for `actions`, the functions will be composed in the given order.
-The FSM will be initialized in the first given state.
+If more than one function is given for `actions`, the functions will be composed in the given order and applied to the current value.
+
+The order of the states is important, as the FSM will be initialized in the first state.
 
 ## See also
+
+... and better use instead:
 
 - https://github.com/cdorrat/reduce-fsm: mature, fast FSM library
 - https://github.com/metosin/tilakone: smaller than reduce-fsm, no macros

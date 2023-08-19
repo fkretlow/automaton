@@ -1,8 +1,8 @@
 (ns com.fkretlow.fsm-clj.parse-test
   (:require
-   [clojure.test :refer [deftest is]]
+   [clojure.test :refer [deftest is run-tests]]
    [com.fkretlow.fsm-clj.parse :refer [normalize-actions normalize-state
-                                   normalize-transition]]))
+                                       normalize-transition]]))
 
 (deftest test-normalize-actions
   (is (= identity (normalize-actions nil)))
@@ -24,7 +24,6 @@
 
 (deftest test-normalize-state
   (is (= {:a {'a [:a identity]}} (normalize-state [:a, 'a :a])))
-  (is (= {:a {'a [:a identity]}} (normalize-state [:a, 'a [:a]])))
-  (is (= {:a {'a [:a identity]}} (normalize-state [:a, 'a [:a nil]])))
-  (is (= {:a {'a [:a identity]}} (normalize-state [:a, 'a [:a []]])))
-  (is (= {:a {'a [:a identity], :_fsm/* [:b inc]}} (normalize-state [:a, 'a :a, [:b inc]]))))
+  (is (= {:a {'a [:a identity], :_fsm/* [:b inc]}} (normalize-state [:a, 'a :a, :b inc]))))
+
+(run-tests)

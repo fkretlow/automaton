@@ -16,9 +16,9 @@
   default-transition:   transition
   state-function:       _a function taking an event and returning a vector
                         containing the elements of a transition as defined below_
-  event:                _anything_
+  event:                _anything except for a function or a collection of functions_
   transition:           state-key actions?
-  actions:              _function_ | _non-empty seqable of functions_
+  actions:              _function_ | _non-empty collection of functions_
   
   where `*` means \"zero or more\", `?` means \"at most one\", `+` means \"at least one\",
   and `|` means \"or\"."

@@ -35,15 +35,17 @@ transition-on-event:  event transition
 default-transition:   transition
 state-function:       a function taking an event and returning a vector
                       containing the elements of a transition as defined below
-event:                anything
+event:                anything except for a function or a collection of functions
 transition:           state-key actions?
-actions:              function | non-empty seqable of functions
+actions:              function | non-empty collection of functions
 ```
 where `*` means \"zero or more\", `?` means \"at most one\", `+` means \"at least one\", and `|` means \"or\"."
 
 If more than one function is given for `actions`, the functions will be composed in the given order and applied to the current value.
 
 The order of the states is important, as the FSM will be initialized in the first state.
+
+The events you process with the FSM can by anything except for functions or collections of functions.
 
 ## See also
 

@@ -5,7 +5,6 @@
   
   Examples:
   `nil` -> `identity`
-  `[]` -> `identity`
   `f` -> `f`
   `[f]` -> `f`
   `[f g]` -> `(comp g f)`
@@ -13,8 +12,8 @@
   [actions]
   (cond
     (fn? actions) actions
-    (empty? actions) identity
-    (and (coll? actions) (every? fn? actions)) (apply comp (reverse actions))
+    (nil? actions) identity
+    (and (coll? actions) (seq actions) (every? fn? actions)) (apply comp (reverse actions))
     :else (throw (ex-info "invalid actions" {:actions actions}))))
 
 (defn normalize-transition
@@ -33,7 +32,7 @@
     :else (throw (ex-info "invalid transition" transition))))
 
 (defn- is-actions-element? [element]
-  (or (fn? element) (and (coll? element) (every? fn? element))))
+  (boolean (or (fn? element) (and (coll? element) (seq element) (every? fn? element)))))
 
 (defn- take-first-transition
   "Same as `(split-at n transition-list)` where `n` is the length of the first transition.

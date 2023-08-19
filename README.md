@@ -1,4 +1,4 @@
-# fsm
+# fsm-clj
 
 A tiny library to model finite state machines.
 

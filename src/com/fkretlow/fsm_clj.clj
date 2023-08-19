@@ -1,6 +1,6 @@
-(ns com.fkretlow.fsm
+(ns com.fkretlow.fsm-clj
   (:require
-   [com.fkretlow.fsm.parse :refer [normalize-state]]))
+   [com.fkretlow.fsm-clj.parse :refer [normalize-state]]))
 
 (defn make-fsm
   "Construct a new fsm from the given `states-vector` and with the given 

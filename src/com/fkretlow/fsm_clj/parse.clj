@@ -1,4 +1,4 @@
-(ns com.fkretlow.fsm.parse)
+(ns com.fkretlow.fsm-clj.parse)
 
 (defn pad [n coll val] (take n (concat coll (repeat val))))
 

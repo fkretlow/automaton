@@ -1,7 +1,7 @@
-(ns com.fkretlow.fsm-test
+(ns com.fkretlow.fsm-clj-test
   (:require
    [clojure.test :refer [deftest is run-tests testing]]
-   [com.fkretlow.fsm :refer [make-fsm process-event reduce-fsm]]))
+   [com.fkretlow.fsm-clj :refer [make-fsm process-event reduce-fsm]]))
 
 (def ^:private count-ab-states [[:init, \a :a, :init]
                                 [:a, \a :a, \b [:init inc], :init]])

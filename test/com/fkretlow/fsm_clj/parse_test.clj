@@ -1,7 +1,7 @@
-(ns com.fkretlow.fsm.parse-test
+(ns com.fkretlow.fsm-clj.parse-test
   (:require
    [clojure.test :refer [deftest is]]
-   [com.fkretlow.fsm.parse :refer [normalize-actions normalize-state
+   [com.fkretlow.fsm-clj.parse :refer [normalize-actions normalize-state
                                    normalize-transition]]))
 
 (deftest test-normalize-actions

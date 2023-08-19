@@ -53,16 +53,29 @@
   Examples:
   `[:a, 'b :b]` -> `{:a {'b [:b identity]}}`
   `[:a, 'b :b, :c]` -> `{:a {'b [:b identity], :_fsm/* [:c identity]}}`
-  `[:a, 'b :b f, 'c :c [f g]]` -> `{:a {'b [:b f], 'c [:c (comp g f)]}}`"
-  [[state-key & transition-list]]
-  (loop [transition-map {}
-         transition-list transition-list]
-    (if (empty? transition-list)
-      {state-key transition-map}
-      (let [[current remaining] (take-first-transition transition-list)
-            [event transition]
-            (if (and (> (count current) 1) (not (is-actions-element? (second current))))
-              [(first current) (rest current)]
-              [:_fsm/* current])]
-        (recur (assoc transition-map event (normalize-transition transition))
-               remaining)))))
+  `[:a, 'b :b f, 'c :c [f g]]` -> `{:a {'b [:b f], 'c [:c (comp g f)]}}`
+  `[:a some-state-fn]` -> `{:a some-state-fn}`
+  `:terminal-state` -> `:terminal-state (constantly nil)`"
+  [state]
+  (cond
+    (keyword? state)
+    {state (constantly nil)}
+
+    (coll? state)
+    (let [[state-key & transition-list-or-state-function] state]
+      {state-key
+       (if (fn? (first transition-list-or-state-function))
+         (first transition-list-or-state-function)
+         (loop [transition-map {}
+                transition-list transition-list-or-state-function]
+           (if (empty? transition-list)
+             transition-map
+             (let [[current remaining] (take-first-transition transition-list)
+                   [event transition]
+                   (if (and (> (count current) 1) (not (is-actions-element? (second current))))
+                     [(first current) (rest current)]
+                     [:_fsm/* current])]
+               (recur (assoc transition-map event (normalize-transition transition))
+                      remaining)))))})
+
+    :else (throw (ex-info "invalid state" {:state state}))))

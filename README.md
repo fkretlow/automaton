@@ -28,13 +28,13 @@ A tiny library to model finite state machines. No macros, just Clojure data stru
 The vector of states given to `make-fsm` must satisfy the following grammar
 ```
 states-vector:        [state+]
-state:                [state-key transition-list | state-function]
+state:                state-key | [state-key transition-list | state-function]
 transition-list       transition-on-event* default-transition?
 state-key:            keyword
 transition-on-event:  event transition
 default-transition:   transition
-state-function:       a function taking an event and returning a vector
-                      containing the elements of a transition as defined below
+state-function:       a function taking an event and the current value and returning a state-key 
+                      or a vector containing the elements of a transition as defined below
 event:                anything except for a function or a collection of functions
 transition:           state-key actions?
 actions:              function | non-empty collection of functions
@@ -43,7 +43,7 @@ where `*` means \"zero or more\", `?` means \"at most one\", `+` means \"at leas
 
 If more than one function is given for `actions`, the functions will be composed in the given order and applied to the current value.
 
-The order of the states is important, as the FSM will be initialized in the first state.
+The FSM will be initialized in the first state, so the order of the states is not irrelevant.
 
 The events you process with the FSM can by anything except for functions or collections of functions.
 

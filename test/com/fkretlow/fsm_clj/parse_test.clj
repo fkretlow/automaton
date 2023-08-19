@@ -1,6 +1,6 @@
 (ns com.fkretlow.fsm-clj.parse-test
   (:require
-   [clojure.test :refer [deftest is run-tests]]
+   [clojure.test :refer [deftest is run-tests testing]]
    [com.fkretlow.fsm-clj.parse :refer [normalize-actions normalize-state
                                        normalize-transition]]))
 
@@ -21,10 +21,17 @@
   (is (thrown? clojure.lang.ExceptionInfo (normalize-transition [:a "do this"]))))
 
 (deftest test-normalize-state
-  (is (= {:a {'a [:a identity]}} (normalize-state [:a, 'a :a])))
-  (is (= {:a {nil [:a identity]}} (normalize-state [:a, nil :a])))
-  (is (= {:a {[] [:a identity]}} (normalize-state [:a, [] :a])))
-  (is (= {:a {'a [:a identity] , nil [:a identity]}} (normalize-state [:a, 'a :a, nil :a])))
-  (is (= {:a {'a [:a identity], :_fsm/* [:b inc]}} (normalize-state [:a, 'a :a, :b inc]))))
+  (testing "states as vectors"
+    (is (= {:a {'a [:a identity]}} (normalize-state [:a, 'a :a])))
+    (is (= {:a {nil [:a identity]}} (normalize-state [:a, nil :a])))
+    (is (= {:a {[] [:a identity]}} (normalize-state [:a, [] :a])))
+    (is (= {:a {'a [:a identity] , nil [:a identity]}} (normalize-state [:a, 'a :a, nil :a])))
+    (is (= {:a {'a [:a identity], :_fsm/* [:b inc]}} (normalize-state [:a, 'a :a, :b inc]))))
+  (testing "terminal state as keyword"
+    (let [state (normalize-state :terminal)]
+      (is (nil? ((:terminal state) 'event)))))
+  (testing "state as function"
+    (let [state-fn (fn [_event _value] [:a identity])]
+      (is (= {:a state-fn} (normalize-state [:a state-fn]))))))
 
 (run-tests)

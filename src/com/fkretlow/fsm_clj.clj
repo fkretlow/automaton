@@ -18,7 +18,7 @@
                         containing the elements of a transition as defined below_
   event:                _anything_
   transition:           state-key actions?
-  actions:              _function_ | _seqable of functions_
+  actions:              _function_ | _non-empty seqable of functions_
   
   where `*` means \"zero or more\", `?` means \"at most one\", `+` means \"at least one\",
   and `|` means \"or\"."
@@ -39,8 +39,3 @@
         (update :value action)
         (assoc :state-key next-state-key))
     fsm))
-
-(defn reduce-fsm
-  "Process the given `events` one by one with the given `fsm` and return the final value."
-  [fsm events]
-  (:value (reduce process-event fsm events)))

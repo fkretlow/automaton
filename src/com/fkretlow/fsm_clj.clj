@@ -25,21 +25,22 @@
   ([states-vector] (make-fsm states-vector nil))
   ([states-vector value]
    (let [init-state-key (first (first states-vector))]
-     {:state-key init-state-key,
-      :states (apply merge (map normalize-state states-vector)),
+     {:state init-state-key,
+      :_fsm/states (apply merge (map normalize-state states-vector)),
       :value value})))
 
 (defn process-event
   "Process the given `event` with the given `fsm` and return the `fsm`."
-  [{:keys [state-key states value], :as fsm} event]
-  (let [state (get states state-key)]
+  [fsm event]
+  (let [state-key (:state fsm)
+        state (get-in fsm [:_fsm/states state-key])]
     (if-let [[next-state-key action]
              (cond
-               (map? state) (or (get-in states [state-key event])
-                                (get-in states [state-key :_fsm/*]))
-               (fn? state) (normalize-transition (state event value))
+               (map? state) (or (get state event)
+                                (get state :_fsm/*))
+               (fn? state) (normalize-transition (state event (:value fsm)))
                :else (throw (ex-info "invalid state" {:state state})))]
       (-> fsm
           (update :value action)
-          (assoc :state-key next-state-key))
+          (assoc :state next-state-key))
       fsm)))

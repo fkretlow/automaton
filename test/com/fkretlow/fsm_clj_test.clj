@@ -10,21 +10,21 @@
 
 (deftest test-make-fsm
   (is (= {:value 0,
-          :state-key :0,
-          :states {:0 {\a [:a identity],
-                       :_fsm/* [:0 identity]},
-                   :a {\a [:a identity],
-                       \b [:0 inc],
-                       :_fsm/* [:0 identity]}}}
+          :state :0,
+          :_fsm/states {:0 {\a [:a identity],
+                            :_fsm/* [:0 identity]},
+                        :a {\a [:a identity],
+                            \b [:0 inc],
+                            :_fsm/* [:0 identity]}}}
          (make-fsm count-ab-states 0))))
 
 (deftest test-process-event
   (let [fsm (make-fsm count-ab-states 0)
         fsm' (process-event fsm \a)
         fsm'' (process-event fsm' \b)]
-    (is (= :a (:state-key fsm')))
+    (is (= :a (:state fsm')))
     (is (= 0 (:value fsm')))
-    (is (= :0 (:state-key fsm'')))
+    (is (= :0 (:state fsm'')))
     (is (= 1 (:value fsm'')))))
 
 (deftest test-states-as-functions

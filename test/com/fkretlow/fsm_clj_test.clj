@@ -3,13 +3,13 @@
    [clojure.test :refer [deftest is run-tests testing]]
    [com.fkretlow.fsm-clj :refer [make-fsm process-event]]))
 
-(defn- reduce-fsm [fsm events] (:value (reduce process-event fsm events)))
+(defn- reduce-fsm [fsm events] (:data (reduce process-event fsm events)))
 
 (def ^:private count-ab-states [[:0, \a :a, :0]
                                 [:a, \a :a, \b :0 inc, :0]])
 
 (deftest test-make-fsm
-  (is (= {:value 0,
+  (is (= {:data 0,
           :state :0,
           :_fsm/states {:0 {\a [:a identity],
                             :_fsm/* [:0 identity]},
@@ -23,9 +23,9 @@
         fsm' (process-event fsm \a)
         fsm'' (process-event fsm' \b)]
     (is (= :a (:state fsm')))
-    (is (= 0 (:value fsm')))
+    (is (= 0 (:data fsm')))
     (is (= :0 (:state fsm'')))
-    (is (= 1 (:value fsm'')))))
+    (is (= 1 (:data fsm'')))))
 
 (deftest test-states-as-functions
   (let [fsm (make-fsm [[:0 (fn [c & _] (if (= \a c) :a :0))]

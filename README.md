@@ -11,16 +11,16 @@ A tiny library to model finite state machines. No macros, just Clojure data stru
                \a :a],                ;   - transitions to :a on event \a
               [:a,                    ; 2nd state: :a
                \a :a,                 ;   - circles back to :a on event \a
-               \b :0 inc,             ;   - transitions to :0 on event \b and applies inc to the value
+               \b :0 inc,             ;   - transitions to :0 on event \b and applies inc to the data
                :0]],                  ;   - transitions to :0 on all other events
-      count-ab (make-fsm states 0)]   ; make the state machine with an initial value of 0
+      count-ab (make-fsm states 0)]   ; make the state machine with 0 as initial data
   ; process single events
   (prn (-> count-ab                     
            (process-event \a)
            (process-event \b)
-           :value))
+           :data))
   ; or use reduce to process all at once
-  (prn (:value (reduce process-event count-ab "ababab")))
+  (prn (:data (reduce process-event count-ab "ababab")))
 ;;=> 1
 ;;=> 3
 ```
@@ -33,7 +33,7 @@ transition-list       transition-on-event* default-transition?
 state-key:            keyword
 transition-on-event:  event transition
 default-transition:   transition
-state-function:       a function taking an event and the current value and returning a state-key 
+state-function:       a function taking an event and the current data and returning a state-key 
                       or a vector containing the elements of a transition as defined below
 event:                anything except for a function or a collection of functions
 transition:           state-key actions?
@@ -41,9 +41,9 @@ actions:              function | non-empty collection of functions
 ```
 where `*` means \"zero or more\", `?` means \"at most one\", `+` means \"at least one\", and `|` means \"or\"."
 
-If more than one function is given for `actions`, the functions will be composed in the given order and applied to the current value.
+If more than one function is given for `actions`, the functions will be composed in the given order and applied to the current data.
 
-The FSM will be initialized in the first state, so the order of the states is not irrelevant.
+The FSM will be initialized in the first given state.
 
 The events you process with the FSM can by anything except for functions or collections of functions.
 

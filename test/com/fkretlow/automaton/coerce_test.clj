@@ -1,10 +1,10 @@
-(ns com.fkretlow.fsm-clj.coerce-test
+(ns com.fkretlow.automaton.coerce-test
   (:require
    [clojure.test :refer [deftest is run-tests]]
-   [com.fkretlow.fsm-clj.coerce :refer [compile-compute-transition is-update-data-element?
-                                       compile-update-data coerce-transition
-                                       transition-list->map
-                                       split-off-first-transition]]))
+   [com.fkretlow.automaton.coerce :refer [compile-compute-transition is-update-data-element?
+                                          compile-update-data coerce-transition
+                                          transition-list->map
+                                          split-off-first-transition]]))
 
 (deftest test-compile-update-data
   (is (= identity (compile-update-data nil)))

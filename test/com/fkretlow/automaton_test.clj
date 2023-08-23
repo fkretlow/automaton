@@ -1,7 +1,7 @@
-(ns com.fkretlow.fsm-clj-test
+(ns com.fkretlow.automaton-test
   (:require
    [clojure.test :refer [deftest is run-tests testing]]
-   [com.fkretlow.fsm-clj :refer [make-machine process-event]]))
+   [com.fkretlow.automaton :refer [make-machine process-event]]))
 
 (defn- reduce-fsm [fsm events] (:data (reduce process-event fsm events)))
 

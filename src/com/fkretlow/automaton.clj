@@ -1,6 +1,6 @@
-(ns com.fkretlow.fsm-clj
+(ns com.fkretlow.automaton
   (:require
-   [com.fkretlow.fsm-clj.coerce :refer [coerce-states]]))
+   [com.fkretlow.automaton.coerce :refer [coerce-states]]))
 
 (defn make-machine
   [states & {:keys [data initial-state]}]

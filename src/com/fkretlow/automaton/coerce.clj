@@ -1,4 +1,4 @@
-(ns com.fkretlow.fsm-clj.coerce)
+(ns com.fkretlow.automaton.coerce)
 
 (defn compile-update-data [update-data]
   (cond

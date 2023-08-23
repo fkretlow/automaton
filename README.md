@@ -1,6 +1,6 @@
-# fsm-clj
+# Automaton
 
-A tiny library to model finite state machines. No macros, just Clojure data structures.
+A library to model state machines.
 
 ## Usage
 
